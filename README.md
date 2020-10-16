@@ -153,4 +153,4 @@ To generate the configuration for that, you can run:
 darker_errors -nginx-conf
 ```
 
-[`nginx` `error_page` documentation`](https://nginx.org/en/docs/http/ngx_http_core_module.html#error_page)
+[`nginx` `error_page` documentation](https://nginx.org/en/docs/http/ngx_http_core_module.html#error_page)
