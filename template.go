@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func SetupTemplate() *template.Template {
+func DarkTheme() *template.Template {
 	tmpl, err := template.New("darker_errors").Parse(
 		`<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>
 html, body {

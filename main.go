@@ -41,7 +41,7 @@ func main() {
 	if config.nginxConf {
 		PrintNginxConf(config)
 	} else {
-		tmpl := SetupTemplate()
+		tmpl := DarkTheme()
 		for httpCode := range StatusCodeMap {
 			// write to file
 			info := MergeWithDefaults(httpCode)
