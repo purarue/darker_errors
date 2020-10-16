@@ -1,4 +1,4 @@
-package main
+package darker_errors
 
 import (
 	"fmt"
@@ -21,7 +21,7 @@ type PageInfo struct {
 // replaces any of the STATUS_CODE/STATUS_MSG tokens on a string,
 // and converts it to template.HTML so the values are interpolated
 // into the HTML directly instead of being escaped
-func renderField(buffer string, httpCode int) template.HTML {
+func renderField(buffer string, httpCode HttpCode) template.HTML {
 	return template.HTML(
 		strings.ReplaceAll(
 			strings.ReplaceAll(buffer, "STATUS_CODE", fmt.Sprintf("%d", httpCode)),
@@ -30,31 +30,12 @@ func renderField(buffer string, httpCode int) template.HTML {
 	)
 }
 
-func MergeWithDefaults(httpCode int) *PageInfo {
-	title := "STATUS_CODE - STATUS_MSG"
-	heading := "<h2>STATUS_CODE</h2>"
-	msg := "<p>STATUS_MSG</p>"
-	headHtml := ""
-	beforeHeading := ""
-	afterHeading := ""
-	afterMessage := ""
-	return &PageInfo{
-		Title:         renderField(title, httpCode),
-		Heading:       renderField(heading, httpCode),
-		Message:       renderField(msg, httpCode),
-		HeadHtml:      renderField(headHtml, httpCode),
-		BeforeHeading: renderField(beforeHeading, httpCode),
-		AfterHeading:  renderField(afterHeading, httpCode),
-		AfterMessage:  renderField(afterMessage, httpCode),
-	}
-}
-
-/// Render the template to a file like object
+// Render the template to a file like object
 func RenderErrorBuffer(tmpl *template.Template, info *PageInfo, fo io.WriteCloser) error {
 	return tmpl.Execute(fo, info)
 }
 
-/// Render the template and write the result to a filepath
+// Render the template and write the result to a filepath
 func RenderErrorFile(tmpl *template.Template, info *PageInfo, filepath string) error {
 	// open file object
 	fo, err := os.Create(filepath)
@@ -66,4 +47,20 @@ func RenderErrorFile(tmpl *template.Template, info *PageInfo, filepath string) e
 		return err
 	}
 	return fo.Close()
+}
+
+// get information from the directives the user gave for this particular
+// HTTP status, else use the default
+// replace the STATUS_CODE/STATUS_MSG strings and return
+// a struct compatible with the template
+func GetPageInfo(dMap *DirectiveMap, httpCode HttpCode) *PageInfo {
+	return &PageInfo{
+		Title:         renderField(dMap.Match(TITLE, httpCode), httpCode),
+		Heading:       renderField(dMap.Match(HEADING, httpCode), httpCode),
+		Message:       renderField(dMap.Match(MESSAGE, httpCode), httpCode),
+		HeadHtml:      renderField(dMap.Match(HEADHTML, httpCode), httpCode),
+		BeforeHeading: renderField(dMap.Match(BEFOREHEADING, httpCode), httpCode),
+		AfterHeading:  renderField(dMap.Match(AFTERHEADING, httpCode), httpCode),
+		AfterMessage:  renderField(dMap.Match(AFTERMESSAGE, httpCode), httpCode),
+	}
 }

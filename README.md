@@ -17,7 +17,7 @@ Since this generates individual pages also means it can be plugged/routed into a
 
 ### Install
 
-`go get github.com/seanbreckenridge/darker_errors`
+`go get gitlab.com/seanbreckenridge/darker_errors`
 
 ---
 

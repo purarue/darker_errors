@@ -1,4 +1,4 @@
-package main
+package darker_errors
 
 import (
 	"fmt"
@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-func PrintNginxConf(conf *DarkerConfig) {
-	folderName := strings.TrimSpace(strings.Trim(conf.outputDir, "./"))
+func PrintNginxConf(outputDir string) {
+	folderName := strings.TrimSpace(strings.Trim(outputDir, "./"))
 	// To store the keys in slice in sorted order
 	statusKeys := make([]int, len(StatusCodeMap))
 	i := 0

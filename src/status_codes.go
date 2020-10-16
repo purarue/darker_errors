@@ -1,6 +1,10 @@
-package main
+package darker_errors
 
-var StatusCodeMap = map[int]string{
+type HttpCode = int
+
+var NoHttpCode = -1
+
+var StatusCodeMap = map[HttpCode]string{
 	400: "Bad Request",
 	401: "Unauthorized",
 	402: "Payment Required",

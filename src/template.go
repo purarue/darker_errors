@@ -1,4 +1,4 @@
-package main
+package darker_errors
 
 import (
 	"html/template"

@@ -3,18 +3,23 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"path"
+
+	dark "gitlab.com/seanbreckenridge/darker_errors/src"
 )
 
 type DarkerConfig struct {
-	outputDir     string
-	nginxConf     bool
-	rawDirectives []string
+	outputDir  string
+	nginxConf  bool
+	directives *dark.DirectiveMap
 }
 
 func parseFlags() *DarkerConfig {
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "A dark-themed error page generator\n\n")
+		flag.PrintDefaults()
+	}
 	// flag definitions
 	output_dir := flag.String("output-dir", "error_html", "output directory for *.html files")
 	nginx_conf := flag.Bool("nginx-conf", false, "generate nginx configuration for mapping static html files")
@@ -24,30 +29,45 @@ func parseFlags() *DarkerConfig {
 	fileInfo, err := os.Stat(*output_dir)
 	if !os.IsNotExist(err) {
 		if !fileInfo.IsDir() {
-			log.Fatalf("Error: Path '%s' is not a directory\n", *output_dir)
+			fmt.Fprintf(os.Stderr, "Error: Path '%s' is not a directory\n", *output_dir)
+			os.Exit(1)
 		}
 	}
+	// use DirectiveMap in main to generate a PageInfo after editing MergeWithDefaults
+	var directives []dark.Directive
+	for _, rawDirective := range flag.Args() {
+		parsedDir, err := dark.ParseDirective(rawDirective)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error parsing directive: %s\n", err)
+			os.Exit(1)
+		}
+		directives = append(directives, *parsedDir)
+	}
 	return &DarkerConfig{
-		outputDir:     *output_dir,
-		nginxConf:     *nginx_conf,
-		rawDirectives: flag.Args(),
+		outputDir:  *output_dir,
+		nginxConf:  *nginx_conf,
+		directives: dark.NewDirectiveMap(directives),
 	}
 }
 
 func main() {
 	config := parseFlags()
 	if config.nginxConf {
-		PrintNginxConf(config)
+		dark.PrintNginxConf(config.outputDir)
 	} else {
 		// create directory
 		os.Mkdir(config.outputDir, os.FileMode(int(0755)))
-		tmpl := DarkTheme()
-		for httpCode := range StatusCodeMap {
-			info := MergeWithDefaults(httpCode)
+		tmpl := dark.DarkTheme()
+		for httpCode := range dark.StatusCodeMap {
+			// the values to interpolate into the HTML template
+			// if the user provided values those are used, else uses
+			// the defaults
+			pageInfo := dark.GetPageInfo(config.directives, httpCode)
 			filepath := path.Join(config.outputDir, fmt.Sprintf("%d.html", httpCode))
-			err := RenderErrorFile(tmpl, info, filepath)
+			err := dark.RenderErrorFile(tmpl, pageInfo, filepath)
 			if err != nil {
-				log.Fatalf("Error rendering %s: %s\n", filepath, err)
+				fmt.Fprintf(os.Stderr, "Error rendering %s: %s\n", filepath, err)
+				os.Exit(1)
 			}
 		}
 	}
