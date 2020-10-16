@@ -85,7 +85,7 @@ darker_errors \
   '502:ERROR_MSG:<p>This page is currently being updated...<br /> This should be fixed in in a few seconds...</p>'
 ```
 
-If you specify both `502:ERROR_MSG`, and `ERROR_MSG`, the `502` overwrites the generic replacement for the 502.html page, while any other page uses the generic ERROR_MSG directive.
+If you specify both `502:ERROR_MSG`, and `ERROR_MSG`, the `502` overwrites the generic replacement for the `502.html` page, while any other page uses the generic `ERROR_MSG` directive.
 
 ## nginx setup
 
