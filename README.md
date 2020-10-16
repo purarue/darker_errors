@@ -1,27 +1,20 @@
 A dark-themed HTTP error page generator.
 
-This is originally created to be used with `nginx`, but the error pages are generic, they can be plugged into any sort of webserver. This just generates static HTML, like:
+![phone preview](./.doc/preview.png)
 
-![](https://sean.fish/favicon.ico)
+This is purposefully minimal, it only generates static HTML. It's meant to be a fallback and replace the default blinding `nginx` error pages.
 
-... like...
+![nginx](./.doc/nginx.jpeg)
 
-```
-```
-
-On all my servers, I'm typically running a reverse proxy, doing a `proxy_pass` to some other location. I don't want to have a singular `nginx` error page or depend on a `nginx` module, in case this has to be used with something else.
-
-Since this generates individual pages also means it can be plugged/routed into any other webserver, disregarding language.
-
-## Generate HTML files
+On most of my servers, I'm typically running a reverse proxy with `nginx`, but I don't want to rely on `nginx`-specific syntax, or have to recompile `nginx` with additional modules, in case I want to use these error pages with something else.
 
 ### Install
 
 `go get gitlab.com/seanbreckenridge/darker_errors`
 
----
+### Usage
 
-`darker_errors` implements a small template language.
+This implements a small template language.
 
 It replaces the strings:
 
@@ -30,22 +23,29 @@ It replaces the strings:
 
 With the corresponding HTTP values.
 
----
-
 To override the default text for each page, you can use replacement directives:
 
 * `ERROR_TITLE` (Text in `<title>`; default: `STATUS_CODE - STATUS_MSG`
 * `ERROR_HEADING` (Large Heading; default: `<h2>STATUS_CODE</h2>`)
 * `ERROR_MSG` (Message; default: `<p>STATUS_MSG<p>`)
 
-You can also inject arbitrary HTML by setting one of the following:
+You can also inject additional HTML by setting one of the following:
 
-* `ERROR_HEAD` (insert HTML into the `<head>` tag)
+* `ERROR_HEAD` (insert HTML into the `<head>` tag, can be used to add additional `<style>` or `<meta>` tags)
 * `ERROR_BEFORE_HEADING` (before `ERROR_HEADING`)
 * `ERROR_AFTER_HEADING` (after `ERROR_HEADING`, before `ERROR_MSG`)
 * `ERROR_AFTER_MSG` (after `ERROR_MSG`)
 
-All positional arguments to `darker_errors` are interpreted as replacement directives.
+Options:
+
+```
+  -nginx-conf
+        generate nginx configuration for mapping static html files
+  -output-dir string
+        output directory for *.html files (default "error_html")
+```
+
+Any additional positional arguments to `darker_errors` are interpreted as replacement directives.
 
 ### Examples:
 
@@ -63,30 +63,27 @@ Include text to go back home on a 404:
 darker_errors '404:ERROR_AFTER_MSG:<p>Click <a href="/">here</a> to go back home.<p>`
 ```
 
-To left-align text:
+To left-align text and add a bit of margin: (Modifying the CSS in general would probably require you to take a look at how the elements are positioned in the HTML in [`src/template.go`](./src/template.go)).
 
 ```
-darker_errors 'ERROR_HEAD:<style>p { text-align: left; }</style>'
+darker_errors 'ERROR_HEAD:<style>#flexbox { align-items: flex-start } #flexbox > div { margin-left: 10%; }</style>'
+```
+
+Add a horizontal rule after the status code:
+
+```
+darker_errors 'ERROR_AFTER_HEADING:<hr />' 'ERROR_HEAD:<style> hr { width: 80% }</style>'
 ```
 
 Refresh the page every 2 seconds if the user encountered a `502` error:
 
 ```
-darker_errors
-  '502:ERROR_HEAD:<meta http-equiv="refresh" content="2">'
-  '502:ERROR_MSG:<p>This page is currently being updated...<br />It should reload when it's done automatically</p>'
+darker_errors \
+  '502:ERROR_HEAD:<meta http-equiv="refresh" content="2">' \
+  '502:ERROR_MSG:<p>This page is currently being updated...<br /> This should be fixed in in a few seconds...</p>'
 ```
 
 If you specify `502:ERROR_MSG`, and `ERROR_MSG`, the `502` overwrites the generic replacement.
-
-          _ _ _     _   _     _     
-  ___  __| (_) |_  | |_| |__ (_)___ 
- / _ \/ _` | | __| | __| '_ \| / __|
-|  __/ (_| | | |_  | |_| | | | \__ \
- \___|\__,_|_|\__|  \__|_| |_|_|___/
-
-It also generates a `template.html` file, in-case you want to insert a title/message with a webserver at runtime. That could be changed to whatever templating language you're using if you want, or by reading the file in, and running a search/replace with your content for `||ERROR_TITLE||`, `||ERROR_HEADER||`, `||ERROR_MSG||`.
-
 
 ## nginx setup
 
@@ -125,7 +122,7 @@ server {
 
 In the case above, since `root` is `/var/www/html`, put the generated `502.html` file at `/var/www/html/502.html`.
 
-If you want to use this *only* with nginx, you could put the `error_html` folder in `/var/www/html`, and then map each error code to the HTML page, like:
+If you want to use this directly with `nginx`, you could put the `error_html` folder in `/var/www/html`, and then map each error code to the HTML page, like:
 
 ```
 error 401 = /error_html/401.html

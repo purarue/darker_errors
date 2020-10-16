@@ -7,31 +7,37 @@ import (
 
 func DarkTheme() *template.Template {
 	tmpl, err := template.New("darker_errors").Parse(
-		`<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>
+		`<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>
 html, body {
   margin: 0px;
   padding: 0px;
   border: 0px;
   width: 100%;
-  min-height: 100vh
-	background-color: #222;
+	height: 100vh;
+	background-color: #121212;
 	color: #eee;
+	font-family: Verdana, Geneva, sans-serif;
 }
-main {
+#flexbox {
+	height: 100%;
+	width: 100%;
 	display: flex;
-  justify-content: center;
+	flex-flow: column nowrap;
 	align-items: center;
+}
+#heading {
+	font-size: 3rem;
+}
+#message {
+	font-size: 1.5rem;
 }
 </style>
 <title>{{ .Title }}</title>{{ .HeadHtml }}
 </head>
 <body>
-  <main>
-    <div id="error-container">{{ .BeforeHeading }}
-      <div id="heading">{{ .Heading }}</div>{{ .AfterHeading }}
-      <div id="message">{{ .Message }}</div>{{ .AfterMessage }}
-    </div>
-	</main>
+	<div id="flexbox">
+		{{ .BeforeHeading }}<div id="heading">{{ .Heading }}</div>{{ .AfterHeading }}<div id="message">{{ .Message }}</div>{{ .AfterMessage }}
+	</div>
 </body>
 </html>`)
 	if err != nil {

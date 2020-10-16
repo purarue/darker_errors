@@ -17,7 +17,10 @@ type DarkerConfig struct {
 
 func parseFlags() *DarkerConfig {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "A dark-themed error page generator\n\n")
+		fmt.Fprintf(os.Stderr, `A dark-themed HTTP error page generator
+Additional positional arguments are interpreted as replacement directives
+For more inforation see https://github.com/seanbreckenridge/darker_errors
+`)
 		flag.PrintDefaults()
 	}
 	// flag definitions
@@ -70,5 +73,6 @@ func main() {
 				os.Exit(1)
 			}
 		}
+		// generate template.html
 	}
 }
