@@ -50,22 +50,20 @@ func MergeWithDefaults(httpCode int) *PageInfo {
 }
 
 /// Render the template to a file like object
-func RenderBuffer(tmpl *template.Template, info *PageInfo, fo io.WriteCloser) error {
-	err := tmpl.Execute(fo, info)
-	return err
+func RenderErrorBuffer(tmpl *template.Template, info *PageInfo, fo io.WriteCloser) error {
+	return tmpl.Execute(fo, info)
 }
 
 /// Render the template and write the result to a filepath
-func RenderFile(tmpl *template.Template, info *PageInfo, filepath string) error {
+func RenderErrorFile(tmpl *template.Template, info *PageInfo, filepath string) error {
 	// open file object
 	fo, err := os.Create(filepath)
 	if err != nil {
 		return err
 	}
-	err = RenderBuffer(tmpl, info, fo)
+	err = RenderErrorBuffer(tmpl, info, fo)
 	if err != nil {
 		return err
 	}
-	err = fo.Close()
-	return err
+	return fo.Close()
 }

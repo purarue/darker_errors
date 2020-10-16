@@ -27,8 +27,6 @@ func parseFlags() *DarkerConfig {
 			log.Fatalf("Error: Path '%s' is not a directory\n", *output_dir)
 		}
 	}
-	// create directory
-	os.Mkdir(*output_dir, os.FileMode(int(0755)))
 	return &DarkerConfig{
 		outputDir:     *output_dir,
 		nginxConf:     *nginx_conf,
@@ -41,12 +39,13 @@ func main() {
 	if config.nginxConf {
 		PrintNginxConf(config)
 	} else {
+		// create directory
+		os.Mkdir(config.outputDir, os.FileMode(int(0755)))
 		tmpl := DarkTheme()
 		for httpCode := range StatusCodeMap {
-			// write to file
 			info := MergeWithDefaults(httpCode)
 			filepath := path.Join(config.outputDir, fmt.Sprintf("%d.html", httpCode))
-			err := RenderFile(tmpl, info, filepath)
+			err := RenderErrorFile(tmpl, info, filepath)
 			if err != nil {
 				log.Fatalf("Error rendering %s: %s\n", filepath, err)
 			}
