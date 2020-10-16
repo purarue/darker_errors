@@ -112,10 +112,24 @@ server {
   ...
   root /var/www/html;
 
-  error 502 = /502.html
+  # modified from https://stackoverflow.com/a/38414723/9348376
 
+  # base pheonix server which handles most of the requests
+  location @pheonix {
+    include /etc/nginx/pheonix_params;
+    proxy_pass http://localhost:8082;
+  }
+
+  # 502 route, incase upstream server is down
+  error_page 502 @offline;
+  location @offline {
+    # file should be at /var/www/html/502.html
+    try_files /502.html 502;
+  }
+
+  # if the path doesnt match some static file, forward to @pheonix server
   location / {
-    proxy_pass ...
+    try_files $uri @pheonix;
   }
 }
 ```
@@ -125,9 +139,12 @@ In the case above, since `root` is `/var/www/html`, put the generated `502.html`
 If you want to use this directly with `nginx`, you could put the `error_html` folder in `/var/www/html`, and then map each error code to the HTML page, like:
 
 ```
-error 401 = /error_html/401.html
-error 404 = /error_html/404.html
-error 502 = /error_html/502.html
+server {
+  ...
+  error_page 401 /error_html/401.html;
+  error_page 404 /error_html/404.html;
+  error_page 502 /error_html/502.html;
+}
 ```
 
 To generate the configuration for that, you can run:
@@ -135,3 +152,5 @@ To generate the configuration for that, you can run:
 ```
 darker_errors -nginx-conf
 ```
+
+[`nginx` `error_page` documentation`](https://nginx.org/en/docs/http/ngx_http_core_module.html#error_page)

@@ -19,6 +19,6 @@ func PrintNginxConf(outputDir string) {
 	sort.Ints(statusKeys)
 	for _, statusCode := range statusKeys {
 		folderPath := path.Join(folderName, fmt.Sprintf("%d", statusCode))
-		fmt.Printf("error %d = /%s.html\n", statusCode, folderPath)
+		fmt.Printf("error_page %d /%s.html;\n", statusCode, folderPath)
 	}
 }
