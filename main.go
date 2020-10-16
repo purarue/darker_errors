@@ -46,7 +46,7 @@ func main() {
 			// write to file
 			info := MergeWithDefaults(httpCode)
 			filepath := path.Join(config.outputDir, fmt.Sprintf("%d.html", httpCode))
-			err := RenderFile(tmpl, filepath, info)
+			err := RenderFile(tmpl, info, filepath)
 			if err != nil {
 				log.Fatalf("Error rendering %s: %s\n", filepath, err)
 			}

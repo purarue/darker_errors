@@ -1,10 +1,9 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"html/template"
-	"io/ioutil"
+	"io"
 	"os"
 	"strings"
 )
@@ -50,27 +49,20 @@ func MergeWithDefaults(httpCode int) *PageInfo {
 	}
 }
 
-/// Render tpml to a buffer
-func RenderBuffer(tmpl *template.Template, buf *bytes.Buffer, info *PageInfo) error {
-	err := tmpl.Execute(buf, info)
+/// Render the template to a file like object
+func RenderBuffer(tmpl *template.Template, info *PageInfo, fo io.WriteCloser) error {
+	err := tmpl.Execute(fo, info)
 	return err
 }
 
-/// Render a template and write the result to a filepath
-func RenderFile(tmpl *template.Template, filepath string, info *PageInfo) error {
-	// create temporary bytes buffer to execute template
-	buf := new(bytes.Buffer)
-	err := RenderBuffer(tmpl, buf, info)
-	if err != nil {
-		return err
-	}
+/// Render the template and write the result to a filepath
+func RenderFile(tmpl *template.Template, info *PageInfo, filepath string) error {
 	// open file object
 	fo, err := os.Create(filepath)
 	if err != nil {
 		return err
 	}
-	// write html contents to file
-	err = ioutil.WriteFile(filepath, buf.Bytes(), os.FileMode(int(0755)))
+	err = RenderBuffer(tmpl, info, fo)
 	if err != nil {
 		return err
 	}
