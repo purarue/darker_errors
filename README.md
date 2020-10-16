@@ -1,6 +1,6 @@
 A dark-themed HTTP error page generator.
 
-![phone preview](./.doc/preview.png)
+![preview](./.doc/preview.png)
 
 This is purposefully minimal, it only generates static HTML. It's meant to be a fallback and replace the default blinding `nginx` error pages.
 
