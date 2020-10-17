@@ -25,10 +25,10 @@ html, body {
 	flex-flow: column nowrap;
 	align-items: center;
 }
-#heading {
-	font-size: 3rem;
+h2 {
+	font-size: 4rem;
 }
-#message {
+p {
 	font-size: 1.5rem;
 }
 </style>
