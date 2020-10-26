@@ -20,23 +20,23 @@ This implements a small template language.
 
 It replaces the strings:
 
-* `STATUS_CODE` (e.g. 404)
-* `STATUS_MSG` (e.g. Not Found)
+- `STATUS_CODE` (e.g. 404)
+- `STATUS_MSG` (e.g. Not Found)
 
 With the corresponding HTTP values.
 
 To override the default text for each page, you can use replacement directives:
 
-* `ERROR_TITLE` (Text in `<title>`; default: `STATUS_CODE - STATUS_MSG`
-* `ERROR_HEADING` (Large Heading; default: `<h2>STATUS_CODE</h2>`)
-* `ERROR_MSG` (Message; default: `<p>STATUS_MSG<p>`)
+- `ERROR_TITLE` (Text in `<title>`; default: `STATUS_CODE - STATUS_MSG`
+- `ERROR_HEADING` (Large Heading; default: `<h2>STATUS_CODE</h2>`)
+- `ERROR_MSG` (Message; default: `<p>STATUS_MSG<p>`)
 
 You can also inject additional HTML by setting one of the following:
 
-* `ERROR_HEAD` (insert HTML into the `<head>` tag, can be used to add additional `<style>` or `<meta>` tags)
-* `ERROR_BEFORE_HEADING` (before `ERROR_HEADING`)
-* `ERROR_AFTER_HEADING` (after `ERROR_HEADING`, before `ERROR_MSG`)
-* `ERROR_AFTER_MSG` (after `ERROR_MSG`)
+- `ERROR_HEAD` (insert HTML into the `<head>` tag, can be used to add additional `<style>` or `<meta>` tags)
+- `ERROR_BEFORE_HEADING` (before `ERROR_HEADING`)
+- `ERROR_AFTER_HEADING` (after `ERROR_HEADING`, before `ERROR_MSG`)
+- `ERROR_AFTER_MSG` (after `ERROR_MSG`)
 
 Options:
 
