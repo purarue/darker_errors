@@ -1,8 +1,8 @@
 package darker_errors_test
 
 import (
-	"testing"
 	dark "gitlab.com/seanbreckenridge/darker_errors/src"
+	"testing"
 )
 
 func TestParseDirectiveId(t *testing.T) {
