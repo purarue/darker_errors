@@ -6,7 +6,7 @@ import (
 	"os"
 	"path"
 
-	dark "gitlab.com/seanbreckenridge/darker_errors/src"
+	dark "github.com/seanbreckenridge/darker_errors/src"
 )
 
 type DarkerConfig struct {

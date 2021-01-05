@@ -1,7 +1,7 @@
 package darker_errors_test
 
 import (
-	dark "gitlab.com/seanbreckenridge/darker_errors/src"
+	dark "github.com/seanbreckenridge/darker_errors/src"
 	"testing"
 )
 
