@@ -12,7 +12,7 @@ To be clear, this is not `nginx` specific, its just why I created this. [Here's 
 
 ### Install
 
-`go get github.com/seanbreckenridge/darker_errors`
+`go install github.com/seanbreckenridge/darker_errors@latest`
 
 ### Usage
 
