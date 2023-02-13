@@ -19,7 +19,7 @@ const (
 
 type DirectiveId = uint
 
-/// a parsed directive from the user
+// / a parsed directive from the user
 type Directive struct {
 	/// the HTTP code to apply this directive to
 	/// NoHttpCode is a sentinel value (-1) which
@@ -104,7 +104,7 @@ type DirectiveMap struct {
 	forDirective map[DirectiveId][]Directive
 }
 
-/// Create a new directive map
+// / Create a new directive map
 func NewDirectiveMap(directives []Directive) *DirectiveMap {
 	// TODO: use 2 maps here? could improve speed a bit; but there aren't that many HTTP codes anyways
 	// number of custom directives is probably low, so this is fine
