@@ -19,7 +19,7 @@ func parseFlags() *DarkerConfig {
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, `A dark-themed HTTP error page generator
 Additional positional arguments are interpreted as replacement directives
-For more inforation see https://github.com/seanbreckenridge/darker_errors
+For more information see https://github.com/seanbreckenridge/darker_errors
 `)
 		flag.PrintDefaults()
 	}

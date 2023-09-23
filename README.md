@@ -122,14 +122,14 @@ server {
     proxy_pass http://localhost:8082;
   }
 
-  # 502 route, incase upstream server is down
+  # 502 route, in case upstream server is down
   error_page 502 @offline;
   location @offline {
     # file should be at /var/www/html/502.html
     try_files /502.html 502;
   }
 
-  # if the path doesnt match some static file, forward to @pheonix server
+  # if the path doesn't match some static file, forward to @pheonix server
   location / {
     try_files $uri @pheonix;
   }

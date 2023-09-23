@@ -52,7 +52,7 @@ func TestParseDirective(t *testing.T) {
 		t.Errorf("Expected MESSAGE const for '%s'\n", input)
 	}
 	if directive.Replacement != "<h1>STATUS_MSG</h1>" {
-		t.Errorf("Replacement text doesnt match input argument for '%s'\n", input)
+		t.Errorf("Replacement text doesn't match input argument for '%s'\n", input)
 	}
 
 	// check HTTP code specific input
@@ -68,7 +68,7 @@ func TestParseDirective(t *testing.T) {
 		t.Errorf("Expected HEADHTML const for '%s'\n", input)
 	}
 	if directive.Replacement != `<meta http-equiv="refresh" content="2">` {
-		t.Errorf("Replacement text doesnt match input argument for '%s'\n", input)
+		t.Errorf("Replacement text doesn't match input argument for '%s'\n", input)
 	}
 
 }

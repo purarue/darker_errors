@@ -134,7 +134,7 @@ func (dm *DirectiveMap) Match(id DirectiveId, httpCode HttpCode) string {
 			return dr.Replacement
 		}
 	}
-	// if we didnt match a specific code, but a generic directive existed, use that
+	// if we didn't match a specific code, but a generic directive existed, use that
 	if genericMatch != nil {
 		return genericMatch.Replacement
 	}
