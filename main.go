@@ -6,7 +6,7 @@ import (
 	"os"
 	"path"
 
-	dark "github.com/seanbreckenridge/darker_errors/src"
+	dark "github.com/purarue/darker_errors/src"
 )
 
 type DarkerConfig struct {
@@ -19,7 +19,7 @@ func parseFlags() *DarkerConfig {
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, `A dark-themed HTTP error page generator
 Additional positional arguments are interpreted as replacement directives
-For more information see https://github.com/seanbreckenridge/darker_errors
+For more information see https://github.com/purarue/darker_errors
 `)
 		flag.PrintDefaults()
 	}

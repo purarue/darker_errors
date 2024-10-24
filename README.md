@@ -8,11 +8,11 @@ This is purposefully minimal, it only generates static HTML. It's meant to be a 
 
 On most of my servers, I'm typically running a reverse proxy with `nginx`, but I don't want to rely on `nginx`-specific syntax, or have to recompile `nginx` with additional modules, in case I want to use these error pages with something else.
 
-To be clear, this is not `nginx` specific, its just why I created this. [Here's me using it](https://github.com/seanbreckenridge/glue/tree/master/lib/glue_web/templates/error) in a completely different web framework; since they're just static HTML files its pretty trivial to add it to any sort of framework/server.
+To be clear, this is not `nginx` specific, its just why I created this. [Here's me using it](https://github.com/purarue/glue/tree/master/lib/glue_web/templates/error) in a completely different web framework; since they're just static HTML files its pretty trivial to add it to any sort of framework/server.
 
 ### Install
 
-`go install github.com/seanbreckenridge/darker_errors@latest`
+`go install github.com/purarue/darker_errors@latest`
 
 ### Usage
 
